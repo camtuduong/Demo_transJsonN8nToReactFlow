@@ -88,9 +88,11 @@ const convertN8nToReactFlow = (
                 target: targetId,
                 sourceHandle: `output-${outputIndex}`,
                 targetHandle: `input-${connection.index || 0}`,
+
                 type: "smoothstep",
                 animated: true,
                 style: { stroke: "#555", strokeWidth: 2 },
+
                 // label: `${outputIndex} → ${connection.index || 0}`,
               });
             });

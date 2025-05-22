@@ -8,110 +8,115 @@ const getNodeTypeColor = (nodeType: string) => {
   return "#fff";
 };
 
-const CustomNode: React.FC<{ data: NodeData }> = ({ data }) => (
-  <div
-    style={{
-      padding: 10,
-      borderRadius: 8,
-      background: getNodeTypeColor(data.nodeType || ""),
-      border: "1px solid #ccc",
-      boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-      maxWidth: 250,
-      fontSize: "14px",
-      position: "relative",
-    }}
-  >
-    <Handle
-      type="target"
-      position={Position.Top}
-      id="input"
-      style={{ background: "#555", width: 10, height: 10 }}
-    />
-
+const CustomNode: React.FC<{ data: NodeData }> = ({ data }) => {
+  const isReplaceNode = data.label === "Replace Me";
+  return (
     <div
       style={{
-        fontWeight: "bold",
-        marginBottom: "8px",
-        borderBottom: "1px solid #ddd",
-        paddingBottom: "4px",
+        padding: 10,
+        borderRadius: 8,
+        background: getNodeTypeColor(data.nodeType || ""),
+        border: "1px solid #ccc",
+        boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+        maxWidth: 250,
+        fontSize: "14px",
+        position: "relative",
       }}
     >
-      {data.label}
-    </div>
+      <Handle
+        type="target"
+        // position={Position.Left}
+        position={isReplaceNode ? Position.Right : Position.Left}
+        id="input"
+        style={{ background: "#555", width: 10, height: 10 }}
+      />
 
-    {data.conditions && data.conditions.length > 0 && (
-      <div style={{ fontSize: "12px" }}>
-        <div style={{ fontWeight: "bold" }}>
-          Conditions ({data.combinator?.toUpperCase()}):
-        </div>
-        {data.conditions.map((cond: Condition, i: number) => (
-          <div
-            key={i}
-            style={{
-              marginTop: "4px",
-              padding: "4px",
-              background: "rgba(255,255,255,0.5)",
-              borderRadius: "4px",
-            }}
-          >
-            {cond.leftValue?.replace(/{{ | }}/g, "")}{" "}
-            <strong>{cond.operator?.operation.toUpperCase()}</strong>{" "}
-            {cond.rightValue}
+      <div
+        style={{
+          fontWeight: "bold",
+          marginBottom: "8px",
+          borderBottom: "1px solid #ddd",
+          paddingBottom: "4px",
+        }}
+      >
+        {data.label}
+      </div>
+
+      {data.conditions && data.conditions.length > 0 && (
+        <div style={{ fontSize: "12px" }}>
+          <div style={{ fontWeight: "bold" }}>
+            Conditions ({data.combinator?.toUpperCase()}):
           </div>
-        ))}
-      </div>
-    )}
-
-    {data.documentId && (
-      <div style={{ fontSize: "12px" }}>
-        <div>
-          <strong>Sheet:</strong> {data.documentId}
-        </div>
-        {data.sheetName && (
-          <div>
-            <strong>Tab:</strong> {data.sheetName}
-          </div>
-        )}
-      </div>
-    )}
-
-    {data.subject && (
-      <div style={{ fontSize: "12px" }}>
-        <strong>Email Subject:</strong> {data.subject}
-      </div>
-    )}
-
-    {data.parameters &&
-      !data.conditions &&
-      !data.documentId &&
-      !data.subject && (
-        <div
-          style={{
-            fontSize: "11px",
-            color: "#555",
-            marginTop: "5px",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          <strong>Parameters:</strong>{" "}
-          {typeof data.parameters === "object"
-            ? JSON.stringify(data.parameters).substring(0, 50) + "..."
-            : data.parameters}
+          {data.conditions.map((cond: Condition, i: number) => (
+            <div
+              key={i}
+              style={{
+                marginTop: "4px",
+                padding: "4px",
+                background: "rgba(255,255,255,0.5)",
+                borderRadius: "4px",
+              }}
+            >
+              {cond.leftValue?.replace(/{{ | }}/g, "")}{" "}
+              <strong>{cond.operator?.operation.toUpperCase()}</strong>{" "}
+              {cond.rightValue}
+            </div>
+          ))}
         </div>
       )}
 
-    <div style={{ fontSize: "10px", color: "#777", marginTop: "5px" }}>
-      Type: {data.nodeType}
-    </div>
+      {data.documentId && (
+        <div style={{ fontSize: "12px" }}>
+          <div>
+            <strong>Sheet:</strong> {data.documentId}
+          </div>
+          {data.sheetName && (
+            <div>
+              <strong>Tab:</strong> {data.sheetName}
+            </div>
+          )}
+        </div>
+      )}
 
-    <Handle
-      type="source"
-      position={Position.Bottom}
-      id="output"
-      style={{ background: "#555", width: 10, height: 10 }}
-    />
-  </div>
-);
+      {data.subject && (
+        <div style={{ fontSize: "12px" }}>
+          <strong>Email Subject:</strong> {data.subject}
+        </div>
+      )}
+
+      {data.parameters &&
+        !data.conditions &&
+        !data.documentId &&
+        !data.subject && (
+          <div
+            style={{
+              fontSize: "11px",
+              color: "#555",
+              marginTop: "5px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            <strong>Parameters:</strong>{" "}
+            {typeof data.parameters === "object"
+              ? JSON.stringify(data.parameters).substring(0, 50) + "..."
+              : data.parameters}
+          </div>
+        )}
+
+      <div style={{ fontSize: "10px", color: "#777", marginTop: "5px" }}>
+        Type: {data.nodeType}
+      </div>
+
+      <Handle
+        type="source"
+        // position={Position.Right}
+        position={isReplaceNode ? Position.Left : Position.Right}
+        id="output"
+        style={{ background: "#555", width: 10, height: 10 }}
+      />
+    </div>
+  );
+};
 
 export default CustomNode;
